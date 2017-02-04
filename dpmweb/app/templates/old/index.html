@@ -1,0 +1,12 @@
+<html>
+  <head>
+    {% if title %}
+    <title>{{ title }} - DeepPixelMonster</title>
+    {% else %}
+    <title>DeepPixelMonster</title>
+    {% endif %}
+  </head>
+  <body>
+    <h1>Hello, {{ user.nickname }}!</h1>
+  </body>
+</html>

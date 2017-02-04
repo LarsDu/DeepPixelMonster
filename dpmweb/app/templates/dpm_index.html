@@ -1,0 +1,29 @@
+<!-- extend base layout -->
+{% extends "dpm_base.html" %}
+{% block content %}
+<br>
+<br>
+<p class="lead">
+    {{caption}}
+</p>
+
+<p class="text-center">
+    <!--Random seed values: {{rand_num}}-->
+    {% for img_file in img_list %}
+    <!--{{img_file}}-->
+    <img src={{img_file|safe}} align="middle" width=160 style="image-rendering: pixelated;">
+    {% endfor %}
+    {{main_table}}
+    
+</p>
+
+<p class="text-center">
+    <a href={{button1_link}} 
+       class="btn btn-primary btn-lg"  
+       name="generator_button" 
+       role="button">
+       {{button1_message}}
+    </a>
+</p>
+{% endblock %}
+

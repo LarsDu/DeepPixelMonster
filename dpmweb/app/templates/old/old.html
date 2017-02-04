@@ -1,0 +1,32 @@
+{% if gen_button_pressed == False %}
+		<p class="text-center">
+		    <form action = {{url_for('generate_monsters')}} method='POST'>
+			<input type='submit' value="GENERATE">
+		    </form>
+		</p>
+		    <!--
+		    <p class="text-center">
+			<button class="btn btn-primary btn-lg"
+				name="generator_button"
+				href="/generate_monsters"
+				role="button">GENERATE
+			</button></p>-->
+		    
+		{% elif gen_button_pressed == True %}
+		    <!--
+		    <p class="text-center">
+			    <button class="btn btn-primary btn-lg"
+				    name="generator_button"
+				    href="/generate_monsters"
+				    role="button">GENERATE MORE
+			    </button></p>
+		       -->
+		<p class="text-center">
+		    <form action = {{url_for('generate_monsters')}} method='POST'>
+			<input type='submit' value="GENERATE">			
+		    </form>
+		</p>
+		
+		
+		{% endif %}
+		

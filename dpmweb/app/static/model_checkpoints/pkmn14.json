@@ -1,0 +1,11 @@
+{
+    "image_dir":"/media/apartment_ssd/DeepPixelMonster/PKMN_GIFS/64x64",
+    "training_file":"",
+    "save_dir":"pkmn14",
+    "num_epochs":4000,
+    "batch_size":64,
+    "learning_rate":2e-4,
+    "beta1":0.5
+}
+    
+    
