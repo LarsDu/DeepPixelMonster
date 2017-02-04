@@ -5,6 +5,16 @@ HDF5/*
 PKMN_ART/*
 pokeapi/*
 veekun-pokedex.sqlite
+**OLD/
+**backups/
+json/*
+PKMN_TRAINING_GIFS/*
+PKMN_ART/*
+PKMN*
+**/live_monsters #Images generated for server are stored here
+**/monsters_g1/*
+**/monsters_g2/*
+
 =======
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -96,4 +106,4 @@ ENV/
 # Rope project settings
 .ropeproject
 >>>>>>> 54321bda98521d178bf7fadc74a219ca3cb69f27
-dpmweb/*
+
