@@ -1,0 +1,43 @@
+<!-- extend base layout -->
+{% extends "dpm_base.html" %}
+{% block content %}
+<p align="center" style = "font-size:20px">
+    {{caption}}
+</p>
+<div align="center">
+    {{center_image}}
+</div>
+<br>
+<br>
+{% if button1_message  %}
+<p class="text-center">
+    <a href={{button1_link}} 
+       class="btn btn-primary btn-lg"  
+       name="button_1" 
+       role="button">
+       {{button1_message}}
+    </a>
+</p>
+{% endif %}
+
+<div align = "center">
+    {{main_table}}
+</div>
+<br>
+{% if button2_message  %}
+<p class="text-center">
+    <a href={{button2_link}} 
+       class="btn btn-primary btn-lg"  
+       name="button_2" 
+       role="button"
+       target = {{button2_target}}
+       style = "background-color: #93dcc3;">
+       {{button2_message}}
+    </a>
+</p>
+{% endif %}
+<br>
+
+
+{% endblock %}
+

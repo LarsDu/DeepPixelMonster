@@ -86,14 +86,7 @@ class DCGAN(object):
             os.makedirs(img_dir)
         self.img_dir = img_dir
 
-
-
-
-
-
-        
-
-
+ 
         
     def make_ops(self,d_method,g_method):
         """
@@ -384,10 +377,13 @@ class DCGAN(object):
             
 
     def generate_random_images(self,n,image_dir):
+
+        
         #self.flask_demo(self.flask_checkpoint_dir)
         #Use n as our batch size
         z_val = np.random.uniform(-1.,1,[n,self.z_dim]).astype(np.float32)
         z_list = np.vsplit(z_val,n)
+        z_list = [z[0] for z in z_list]
 
         print self.sess
         print "Z_list",len(z_list)
@@ -409,54 +405,78 @@ class DCGAN(object):
             scipy.misc.imsave(img_fname,img_samp)
         return fnames_list,z_list
 
-    def latent_walk(self,z_key,z_index,step_size=0.05,num_steps = 16):
+    def latent_walk(self,z_key,z_inds,image_dir,step_size=0.05,num_steps = 8):
+        """ 
+        Given a 1-d numpy array, and an index or set of indices within that array,
+        create copies of the input array with the selected index altered.
+
+        :param z_key: Numpy 1d array with entries in range [-1,1] and len equal to self.z_dim
+        :param z_inds: A integer or list of integers
+        :param image_dir: A directory
+        :param step_size: Size of steps to walk along z_index (or z-indices)
+        :param num_steps: Number of steps 
+        :returns: fnames_list of output files (incl directory), z_list of new keys
+        :rtype:
+
+        (Note: Hey, I tested emacs sphinx C-c M-d!) 
+
         """
-        For a given z array, select an index, and generate images stepping along that index
+        if type(z_inds) != list: #if only one value entered
+            z_index = [z_inds]
+
+        if z_key.shape[0] != self.z_dim:
+            print ("Error, z_key shape is incorrect")
+            return
+        #make a num_steps x num_steps matrix with z_key in every element
+        #!FIXME: cannot reshape array of size 6 into shape (6,128)
+        z_vals = np.reshape(np.tile(z_key,num_steps),(num_steps,self.z_dim)) 
+
+        for z_index in z_inds:
+            step_range = step_size*num_steps
+            if step_range > 2:
+                print "Step range too wide"
+                step_size= (2.-0.08)/num_steps
+                print "Setting step size to ",step_size
+            if z_index <0 or z_index > self.z_dim:
+                z_index = np.random.randint(0,self.z_dim)
+                print "Error z_index exceeds bounds. Setting z_index to",z_index
+
+            center = z_key[int(z_index)]
+            margin = step_range/2
+            if (center-margin) <-1:
+                center = -1+margin
+            if center+margin>1:
+                center = 1-margin
+
+
+            start_walk = center-margin
+            stop_walk = center+margin
+            dim_steps = np.arange(start_walk,stop_walk,step_size,dtype=np.float32)
+
+            """Create versions of the z-vec with a single dimension altered"""
+            z_vals[:,z_index] = dim_steps 
+
+
         
-        """
-        step_range = step_size*num_steps
-        if step_range > 2:
-            print "Step range too wide"
-            step_size= (2.-0.08)/num_steps
-        if z_index <0 or z_index > self.z_dim:
-            z_index = np.random.randint(0,self.z_dim)
-            print "Error z_index exceeds bounds. Setting z_index to",self.z_dim
-
-        center = z_key[z_index]
-        margin = step_range/2
-        if center-margin <-1:
-            center = -1+margin
-        if center+margin>1:
-            center = 1-margin
-
-            
-        start_walk = center-margin
-        stop_walk = center+margin
-        dim_steps = np.arange(start_walk,stop_walk,step_size,dtype=np.float32)
-        z_vals = np.reshape(np.tile(z_key,num_steps),(num_steps, self.z_dim))
-
-        z_vals[:,z_index] = dim_steps
+        z_list = np.vsplit(z_vals,num_steps)
+        z_list = [z[0] for z in z_list]#Need to prevent entries becoming [1,z_dim]
         
         for i in range(0,num_steps):
                    
-            uid = str(uuid.uuid4())
+            
             samples = self.sess.run([self.S],
-                                feed_dict={self.z_pholder:z_vals} )
+                                feed_dict={self.z_pholder:z_vals} )[0]
             fnames_list = []
-            for imidx in range(n):
+            for imidx in range(num_steps):
+                uid = str(uuid.uuid4())
                 #Create image with uuid name
                 img_fname = (image_dir+os.sep+uid+'.png')
                 img_samp = du_utils.tanh_to_sig_scale(samples[imidx,:,:,:],255.)
                 fnames_list.append(img_fname)
                 scipy.misc.imsave(img_fname,img_samp)
-            return fnames_list,z_list
+        return fnames_list,z_list
     
         
-                
-    """
-    Network methods
-    TODO: See if breaking these down into classes will make them reusable
-    """
 
     def generator_openai(self,z,reuse=False):
         ##genE

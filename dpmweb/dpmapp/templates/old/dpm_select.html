@@ -1,0 +1,27 @@
+<!-- extend base layout -->
+{% extends "dpm_base.html" %}
+{% block content %}
+<br>
+<br>
+<p class="lead">
+    Select your favorite monster or generate more
+</p>
+<br>
+<br>
+<p class="text-center">
+    <!--Random seed values: {{rand_num}}-->
+{{main_table}}
+    
+</p>
+
+
+<p class="text-center">
+    <a href="gen_more" 
+       class="btn btn-primary btn-lg"  
+       name="generic_button" 
+       role="button">{{button1_message}}
+    </a>
+    
+</p>
+{% endblock %}
+
